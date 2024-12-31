@@ -42,8 +42,8 @@ const Gallery = () => {
                 <Image
                   src={postcard.image_url}
                   alt={`Postcard from ${postcard.month}`}
-                  fill
-                  style={{ objectFit: 'contain' }}
+                  layout="fill"
+                  objectFit="contain"
                   className="rounded-lg"
                 />
               </div>
