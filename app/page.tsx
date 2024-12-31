@@ -4,7 +4,6 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import Image from 'next/image'
-import { uploadImage } from './actions/upload'
 import { ChevronLeft, ChevronRight, Upload } from 'lucide-react'
 
 interface Postcard {
@@ -14,7 +13,7 @@ interface Postcard {
   custom_url: string
 }
 
-export default function Home() {
+export default function Gallery() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [postcards, setPostcards] = useState<Postcard[]>([])
@@ -78,14 +77,29 @@ export default function Home() {
 
     setUploading(true)
     const file = event.target.files[0]
-    const formData = new FormData()
-    formData.append('file', file)
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${Math.random()}.${fileExt}`
+    const filePath = `${fileName}`
 
     try {
-      const result = await uploadImage(formData)
-      if (result.error) {
-        throw new Error(result.error)
+      let { error: uploadError } = await supabase.storage
+        .from('postcards')
+        .upload(filePath, file)
+
+      if (uploadError) {
+        throw uploadError
       }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('postcards')
+        .getPublicUrl(filePath)
+
+      const { error: insertError } = await supabase
+        .from('postcards')
+        .insert({ image_url: publicUrl, month: new Date().toLocaleString('default', { month: 'long' }) })
+
+      if (insertError) throw insertError
+
       await fetchPostcards()
     } catch (error) {
       console.error('Error uploading image:', error)
