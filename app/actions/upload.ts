@@ -3,10 +3,14 @@
 import { createClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+if (!supabaseUrl || !supabaseServiceRoleKey) {
+  throw new Error('Missing environment variables for Supabase')
+}
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey)
 
 export async function uploadImage(formData: FormData) {
   const file = formData.get('file') as File
@@ -17,12 +21,12 @@ export async function uploadImage(formData: FormData) {
   const buffer = await file.arrayBuffer()
   const fileName = `${Date.now()}_${file.name}`
 
-  const { data, error } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from('postcards')
     .upload(fileName, buffer)
 
-  if (error) {
-    return { error: error.message }
+  if (uploadError) {
+    return { error: uploadError.message }
   }
 
   const { data: { publicUrl } } = supabase.storage
@@ -41,5 +45,4 @@ export async function uploadImage(formData: FormData) {
   revalidatePath('/')
   return { publicUrl }
 }
-
 

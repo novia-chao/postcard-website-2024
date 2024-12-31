@@ -12,8 +12,8 @@ const Gallery = () => {
   const handleScroll = () => {
     if (!containerRef.current) return
     const scrollPercentage = containerRef.current.scrollLeft / (containerRef.current.scrollWidth - containerRef.current.clientWidth)
-    const index = Math.min(Math.floor(scrollPercentage * postcards.length), postcards.length - 1)
-    setCurrentIndex(index)
+    const newIndex = Math.min(Math.floor(scrollPercentage * postcards.length), postcards.length - 1)
+    setCurrentIndex(newIndex)
   }
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Gallery = () => {
           ref={containerRef}
           className="absolute inset-0 flex items-center overflow-x-auto hide-scrollbar"
         >
-          {postcards.map((postcard, index) => (
+          {postcards.map((postcard) => (
             <div 
               key={postcard.id}
               className="min-w-full h-full flex items-center justify-center flex-shrink-0"
