@@ -2,7 +2,6 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
 import { postcards } from '../lib/localData'
 
 const Gallery = () => {
@@ -39,13 +38,10 @@ const Gallery = () => {
               <div 
                 className="relative w-[80vw] h-[70vh] bg-white rounded-lg overflow-hidden"
               >
-                <Image
+                <img
                   src={postcard.image_url}
                   alt={`Postcard from ${postcard.month}`}
-                  fill
-                  sizes="80vw"
-                  style={{ objectFit: 'contain' }}
-                  className="rounded-lg"
+                  className="w-full h-full object-contain rounded-lg"
                 />
               </div>
             </div>
