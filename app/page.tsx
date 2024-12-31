@@ -2,7 +2,6 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
 import { postcards } from '../lib/localData'
 
 const Gallery = () => {
@@ -37,15 +36,12 @@ const Gallery = () => {
               className="min-w-full h-full flex items-center justify-center flex-shrink-0"
             >
               <div 
-                className="relative w-[80vw] h-[70vh] bg-white rounded-lg overflow-hidden"
+                className="relative w-[80vw] h-[70vh] bg-white rounded-lg overflow-hidden flex items-center justify-center"
               >
-                <Image
+                <img
                   src={postcard.image_url}
                   alt={`Postcard from ${postcard.month}`}
-                  width={1200}
-                  height={800}
-                  priority
-                  className="rounded-lg object-contain"
+                  className="max-w-full max-h-full object-contain rounded-lg"
                 />
               </div>
             </div>
