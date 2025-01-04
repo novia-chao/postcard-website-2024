@@ -50,7 +50,7 @@ const Gallery = () => {
       </div>
 
       <div className="h-32 relative flex flex-col justify-center items-center bg-white">
-        <div className="relative w-full max-w-xl mx-auto">
+        <div className="relative w-full max-w-md mx-auto">
           <div className="h-px bg-gray-300 relative" style={{ width: '100%' }}>
             <AnimatePresence>
               {postcards.map((_, index) => {
@@ -93,4 +93,3 @@ const Gallery = () => {
 }
 
 export default Gallery
-
